@@ -1,13 +1,9 @@
 package com.example.komatsu
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.komatsu.databinding.ActivityMainBinding
+import com.example.komatsu.ui.fragments.MangaListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, MangaListFragment())
                 .commitNow()
         }
     }

@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.komatsu.data.repository.MangaRepository
 import com.example.komatsu.domain.models.Manga
-import com.example.komatsu.domain.repository.MangaRepository
 import kotlinx.coroutines.launch
 
 class MangaDetailsViewModel(private val mangaRepository: MangaRepository) : ViewModel() {

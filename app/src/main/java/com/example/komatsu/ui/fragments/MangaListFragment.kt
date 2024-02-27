@@ -10,11 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.adia.dev.playground.ui.home.MangaListViewModel
 import com.example.komatsu.ui.view.adapters.MangaListAdapter
 import com.example.komatsu.databinding.FragmentMangaListBinding
 import com.example.komatsu.domain.models.Manga
 import com.example.komatsu.ui.view.activities.MangaDetailsActivity
-import com.example.komatsu.ui.viewmodel.MangaListViewModel
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.coroutines.CoroutineContext

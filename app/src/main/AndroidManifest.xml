@@ -26,7 +26,7 @@
             android:name=".ui.view.activities.ExploreActivity"
             android:exported="false"
             android:label="@string/title_activity_explore"
-            android:theme="@style/Theme.CustomTheme.NoActionBar"></activity>
+            android:theme="@style/Theme.CustomTheme.NoActionBar"/>
         <activity
             android:name=".ui.view.activities.AuthenticationActivity"
             android:exported="true"

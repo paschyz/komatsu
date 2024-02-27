@@ -1,9 +1,8 @@
 package com.example.komatsu.di.modules
 
-import com.example.komatsu.domain.repository.MangaRepository
+import com.adia.dev.playground.ui.home.MangaListViewModel
+import com.example.komatsu.data.repository.MangaRepository
 import com.example.komatsu.ui.viewmodel.MangaDetailsViewModel
-import com.example.komatsu.ui.viewmodel.MangaListViewModel
-import com.example.komatsu.ui.di.AppModule
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

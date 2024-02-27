@@ -1,13 +1,12 @@
-package com.example.komatsu.ui.viewmodel
-
+package com.adia.dev.playground.ui.home
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.komatsu.domain.models.Manga
 import com.example.komatsu.data.repository.MangaRepository
+import com.example.komatsu.domain.models.Manga
 import kotlinx.coroutines.launch
 
 class MangaListViewModel(private val mangaRepository: MangaRepository) : ViewModel() {
