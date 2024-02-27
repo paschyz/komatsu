@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="base_url">https://api.mangadex.org</string>
+    <string name="base_cover_url">https://uploads.mangadex.org/covers/%1$s/%2$s</string>
+</resources>
