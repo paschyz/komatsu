@@ -1,4 +1,4 @@
-package com.adia.dev.playground.ui.home
+package com.example.komatsu.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData

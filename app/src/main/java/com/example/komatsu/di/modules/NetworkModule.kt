@@ -3,6 +3,7 @@ package com.example.komatsu.di.modules
 import android.content.Context
 import com.example.komatsu.R
 import com.example.komatsu.data.api.ApiService
+import com.example.komatsu.di.baseUrl
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -15,7 +16,6 @@ val NetWorkModule = module {
 }
 
 fun provideRetrofit(context: Context): Retrofit {
-    val baseUrl = context.getString(R.string.base_url)
     val interceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

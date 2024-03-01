@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.adia.dev.playground.ui.home.MangaListViewModel
+import com.example.komatsu.ui.viewmodel.MangaListViewModel
 import com.example.komatsu.ui.view.adapters.MangaListAdapter
 import com.example.komatsu.databinding.FragmentMangaListBinding
 import com.example.komatsu.domain.models.Manga
