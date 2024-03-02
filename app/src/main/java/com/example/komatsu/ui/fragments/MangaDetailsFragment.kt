@@ -54,7 +54,7 @@ class MangaDetailsFragment : Fragment() {
         viewModel.manga.observe(viewLifecycleOwner) { manga ->
             // Set manga title
             binding.mangaTitle.text = manga.attributes.title["en"]
-
+            binding.mangaDescription.text = manga.attributes.description["en"]
             // Construct coverArtUrl and load it with Glide
             val coverArtFilename =
                 manga.relationships.find { it.type == "cover_art" }?.attributes?.get("fileName") as? String
@@ -91,9 +91,6 @@ class MangaDetailsFragment : Fragment() {
                     }
                 })
                 .into(coverImage)
-
-            // Example of setting other attributes, here we use 'mangaId' as an example for the author text
-            binding.mangaAuthor.text = "Author info not available" // Update with actual author info
         }
     }
 
