@@ -10,9 +10,8 @@ import com.example.komatsu.data.database.dao.MangaDao
 import com.example.komatsu.data.database.entities.MangaCollectionEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import android.util.Log
 
-@Database(entities = [MangaCollectionEntity::class], version = 1)
+@Database(entities = [MangaCollectionEntity::class], version = 1, exportSchema = false)
 @TypeConverters(MangaIdListConverter::class)
 abstract class KomatsuRoomDatabase : androidx.room.RoomDatabase() {
     abstract fun mangaDao(): MangaDao
@@ -29,8 +28,21 @@ abstract class KomatsuRoomDatabase : androidx.room.RoomDatabase() {
         }
 
         fun populateDatabase(mangaCollectionDao: MangaCollectionDao) {
-            val mangaCollection = MangaCollectionEntity("1", "Manga Collection 1")
-            mangaCollectionDao.insert(mangaCollection)
+            val prePopulatedMangaCollections = arrayOf(
+                "Saved",
+                "Reading",
+                "Completed",
+                "On Hold",
+                "Dropped",
+                "Plan to Read",
+            )
+
+            for (mangaCollection in prePopulatedMangaCollections) {
+                mangaCollectionDao.insert(MangaCollectionEntity(
+                    name = mangaCollection,
+                    mangas = listOf("c52b2ce3-7f95-469c-96b0-479524fb7a1a")
+                ))
+            }
         }
     }
 
@@ -50,6 +62,7 @@ abstract class KomatsuRoomDatabase : androidx.room.RoomDatabase() {
                             KomatsuRoomDatabase::class.java,
                             "komatsu_database"
                         )
+                            .fallbackToDestructiveMigration()
                             .addCallback(KomatsuRoomDatabaseCallback(scope))
                             .build()
                     INSTANCE = instance
@@ -59,4 +72,3 @@ abstract class KomatsuRoomDatabase : androidx.room.RoomDatabase() {
         }
     }
 }
-

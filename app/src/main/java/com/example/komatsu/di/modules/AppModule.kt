@@ -5,6 +5,7 @@ import com.example.komatsu.data.repository.MangaRepository
 import com.example.komatsu.ui.viewmodel.MangaDetailsViewModel
 import com.example.komatsu.ui.viewmodel.MangaListViewModel
 import com.example.komatsu.ui.viewmodel.PageViewModel
+import com.example.komatsu.ui.viewmodel.ExploreViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -20,5 +21,6 @@ val AppModule = module {
     viewModel { MangaDetailsViewModel(get()) }
     viewModel { MangaListViewModel(get()) }
     viewModel { PageViewModel(get()) }
+    viewModel { ExploreViewModel(get()) }
 }
 

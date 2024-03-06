@@ -3,11 +3,12 @@ package com.example.komatsu.data.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.komatsu.data.models.MangaId
+import java.util.UUID
 
 
 @Entity(tableName = "manga_collection", primaryKeys = ["id"])
 data class MangaCollectionEntity(
-    val id: String,
+    val id: String = UUID.randomUUID().toString(),
     val name: String,
     val editable: Boolean = true,
     val deletable: Boolean = true,
