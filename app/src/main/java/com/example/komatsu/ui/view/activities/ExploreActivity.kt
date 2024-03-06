@@ -28,6 +28,10 @@ class ExploreActivity : AppCompatActivity() {
             val sectionsPagerAdapter = SectionsPagerAdapter(this, collections)
             val viewPager: ViewPager2 = binding.viewPager
             viewPager.adapter = sectionsPagerAdapter
+            // HACK: This is a workaround for a bug in ViewPager2 where some pages
+            // would get regenerated with the wrong data
+            viewPager.offscreenPageLimit = 10
+
 
             val tabLayout: TabLayout = binding.tabs
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.komatsu.data.repository.MangaRepository
 import com.example.komatsu.domain.models.Manga
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 class MangaListViewModel(private val mangaRepository: MangaRepository) : ViewModel() {
     private val _mangas = MutableLiveData<List<Manga>>()
@@ -19,10 +20,16 @@ class MangaListViewModel(private val mangaRepository: MangaRepository) : ViewMod
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    fun getMangas() {
+    fun getMangas(ids: List<String>? = null) {
         viewModelScope.launch {
             try {
-                val mangas = mangaRepository.getMangas(includes = listOf("cover_art"), limit = limit, offset = offset)
+                val mangas =
+                        mangaRepository.getMangas(
+                                ids = ids,
+                                includes = listOf("cover_art"),
+                                limit = limit,
+                                offset = offset
+                        )
                 if (mangas.isNullOrEmpty()) {
                     _error.value = "No mangas found"
                     Log.e("MangaListViewModel", "No mangas found")
@@ -55,11 +62,28 @@ class MangaListViewModel(private val mangaRepository: MangaRepository) : ViewMod
         }
     }
 
-    fun loadMoreMangas() {
+    fun loadMoreMangas(ids: List<String>? = null) {
+        // if ids is not null, take a slice of the list of ids
+        var sliceIds: List<String>? = null
+        if (ids != null) {
+            val start = offset
+            val end = min(start + limit, ids.size)
+
+            if (start < ids.size) {
+                sliceIds = ids.slice(start until end)
+            }
+        }
+
         viewModelScope.launch {
             offset += limit
             try {
-                val mangas = mangaRepository.getMangas(includes = listOf("cover_art"), limit = limit, offset = offset)
+                val mangas =
+                        mangaRepository.getMangas(
+                                includes = listOf("cover_art"),
+                                limit = limit,
+                                offset = offset,
+                                ids = sliceIds
+                        )
                 if (mangas.isNullOrEmpty()) {
                     _error.value = "No more mangas found"
                     Log.e("MangaListViewModel", "No more mangas found")
@@ -74,3 +98,4 @@ class MangaListViewModel(private val mangaRepository: MangaRepository) : ViewMod
         }
     }
 }
+
