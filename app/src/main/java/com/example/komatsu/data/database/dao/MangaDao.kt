@@ -1,4 +1,7 @@
 package com.example.komatsu.data.database.dao
 
-class MangaDao {
+import androidx.room.Dao
+
+@Dao
+interface MangaDao {
 }

@@ -9,7 +9,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.komatsu.databinding.FragmentExploreLibraryBinding
 import com.example.komatsu.ui.viewmodel.ExploreLibraryViewModel
 
-class LibraryFragment : Fragment() {
+class ExploreLibraryFragment : Fragment() {
     private var _binding: FragmentExploreLibraryBinding? = null
 
     private val binding get() = _binding!!

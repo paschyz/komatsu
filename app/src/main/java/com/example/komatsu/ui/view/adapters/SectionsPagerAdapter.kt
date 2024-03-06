@@ -1,14 +1,10 @@
 package com.example.komatsu.ui.view.adapters
 
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.komatsu.R
-import com.example.komatsu.ui.fragments.LibraryFragment
 import com.example.komatsu.ui.fragments.MangaListFragment
 import com.example.komatsu.ui.fragments.PlaceholderFragment
 
