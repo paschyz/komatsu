@@ -44,6 +44,15 @@ class MangaDetailsFragment : Fragment() {
 
         // Fetch manga details with viewModel
         viewModel.getManga(mangaId)
+        viewModel.getChapters(mangaId)
+        viewModel.chapters.observe(viewLifecycleOwner) { chapters ->
+            chapters?.forEach { chapter ->
+                // Print each chapter
+                println("Chapterssss: ${chapter.chapter}, ID: ${chapter.id}")
+            }
+        }
+
+
 
         val shimmerLayout: ShimmerFrameLayout = binding.shimmerViewContainer
         val coverImage = binding.coverImage

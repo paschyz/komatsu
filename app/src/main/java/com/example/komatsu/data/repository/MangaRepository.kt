@@ -2,6 +2,7 @@ package com.example.komatsu.data.repository
 
 import com.example.komatsu.domain.models.Manga
 import com.example.komatsu.data.api.ApiService
+import com.example.komatsu.domain.models.ChapterVolume
 
 class MangaRepository(private val mangaApi: ApiService) {
 
@@ -82,10 +83,11 @@ class MangaRepository(private val mangaApi: ApiService) {
         return null
     }
 
-    suspend fun getMangaWithVolumesAndChapters(id: String, includes: List<String>? = listOf("en")): List<Manga>? {
+    suspend fun getVolumes(id: String, includes: List<String>? = listOf("en")): List<ChapterVolume>? {
         val response = mangaApi.getMangaWithVolumesAndChapters(id, includes)
         if (response.isSuccessful) {
-            return response.body()?.data
+            val volumesMap = response.body()?.volumes
+            return volumesMap?.values?.toList()
         }
         return null
     }
