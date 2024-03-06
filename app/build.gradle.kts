@@ -100,11 +100,14 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.5.0")
 
 
-
     val room_version = "2.5.0"
 
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
+    // room ktx for coroutines support
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

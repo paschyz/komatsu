@@ -2,23 +2,20 @@ package com.example.komatsu.ui.view.activities
 
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import com.example.komatsu.ui.view.adapters.SectionsPagerAdapter
 import com.example.komatsu.databinding.ActivityExploreBinding
-import com.example.komatsu.ui.view.adapters.TAB_TITLES
+import com.example.komatsu.ui.view.adapters.BUILTIN_TAB_TITLES
+import com.example.komatsu.ui.viewmodel.ExploreViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExploreActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityExploreBinding
-
+    private val viewModel: ExploreViewModel by viewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,13 +24,25 @@ class ExploreActivity : AppCompatActivity() {
         binding = ActivityExploreBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(this)
-        val viewPager: ViewPager2 = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
+        viewModel.allMangaCollections.observe(this) { collections ->
+            val sectionsPagerAdapter = SectionsPagerAdapter(this, collections)
+            val viewPager: ViewPager2 = binding.viewPager
+            viewPager.adapter = sectionsPagerAdapter
+            // HACK: This is a workaround for a bug in ViewPager2 where some pages
+            // would get regenerated with the wrong data
+            viewPager.offscreenPageLimit = 10
 
-        TabLayoutMediator(binding.tabs, viewPager) { tab, position ->
-            tab.text = TAB_TITLES[position]
-        }.attach()
+
+            val tabLayout: TabLayout = binding.tabs
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                if (position < BUILTIN_TAB_TITLES.size) {
+                    tab.text = BUILTIN_TAB_TITLES[position]
+                } else {
+                    tab.text = collections[position - BUILTIN_TAB_TITLES.size].name
+                }
+            }.attach()
+        }
+
 
     }
 }

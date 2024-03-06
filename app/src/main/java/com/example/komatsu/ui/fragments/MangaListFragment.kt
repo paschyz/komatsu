@@ -10,19 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.komatsu.ui.viewmodel.MangaListViewModel
-import com.example.komatsu.ui.view.adapters.MangaListAdapter
 import com.example.komatsu.databinding.FragmentMangaListBinding
 import com.example.komatsu.domain.models.Manga
 import com.example.komatsu.ui.view.activities.MangaDetailsActivity
+import com.example.komatsu.ui.view.adapters.MangaListAdapter
+import com.example.komatsu.ui.viewmodel.MangaListViewModel
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.coroutines.CoroutineContext
 
-class MangaListFragment : Fragment(), CoroutineScope {
+class MangaListFragment(private var mangaIds: List<String>? = null) : Fragment(), CoroutineScope {
 
     private var _binding: FragmentMangaListBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding!!
 
     private val viewModel: MangaListViewModel by viewModel()
 
@@ -33,6 +34,13 @@ class MangaListFragment : Fragment(), CoroutineScope {
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + Job()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            mangaIds = it.getStringArrayList(ARG_MANGA_IDS)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,35 +54,38 @@ class MangaListFragment : Fragment(), CoroutineScope {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = MangaListAdapter(emptyList(), object: MangaListAdapter.OnMangaClickListener {
-            override fun onMangaClick(manga: Manga) {
-                val intent = Intent(context, MangaDetailsActivity::class.java)
-                intent.putExtra("mangaId", manga.id)
-                startActivity(intent)
-            }
-        })
+        val adapter =
+            MangaListAdapter(
+                emptyList(),
+                object : MangaListAdapter.OnMangaClickListener {
+                    override fun onMangaClick(manga: Manga) {
+                        val intent = Intent(context, MangaDetailsActivity::class.java)
+                        intent.putExtra("mangaId", manga.id)
+                        startActivity(intent)
+                    }
+                }
+            )
         binding.mangaListRecyclerView.layoutManager = GridLayoutManager(context, 3)
         binding.mangaListRecyclerView.adapter = adapter
 
-        binding.mangaListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+        binding.mangaListRecyclerView.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
 
-                if (!recyclerView.canScrollVertically(1)) {
-                    showLoadMore()
+                    if (!recyclerView.canScrollVertically(1)) {
+                        showLoadMore()
+                    }
                 }
             }
-        })
+        )
 
-
-        binding.searchEditText.addTextChangedListener {
-            performSearch(it.toString())
-        }
+        binding.searchEditText.addTextChangedListener { performSearch(it.toString()) }
 
         binding.searchButton.setOnClickListener {
             if (binding.searchEditText.text.isEmpty()) {
                 searchJob?.cancel()
-                viewModel.getMangas()
+                viewModel.getMangas(mangaIds)
                 return@setOnClickListener
             }
 
@@ -87,24 +98,28 @@ class MangaListFragment : Fragment(), CoroutineScope {
                 spanCount = 3
             }
 
-            binding.mangaListRecyclerView.layoutManager = if (spanCount == 1) {
-                LinearLayoutManager(context)
-            } else {
-                GridLayoutManager(context, spanCount)
-            }
-
+            binding.mangaListRecyclerView.layoutManager =
+                if (spanCount == 1) {
+                    LinearLayoutManager(context)
+                } else {
+                    GridLayoutManager(context, spanCount)
+                }
         }
 
-        viewModel.mangas.observe(viewLifecycleOwner) { mangas:List<Manga> ->
+        viewModel.mangas.observe(viewLifecycleOwner) { mangas: List<Manga> ->
             adapter.updateMangas(mangas)
         }
 
-        viewModel.getMangas()
+        viewModel.getMangas(mangaIds)
     }
 
     private fun showLoadMore() {
         binding.loadMoreProgressBar.visibility = View.VISIBLE
-        viewModel.loadMoreMangas()
+        if (mangaIds != null) {
+            viewModel.loadMoreMangas(mangaIds)
+        } else {
+            viewModel.loadMoreMangas()
+        }
         binding.loadMoreProgressBar.visibility = View.GONE
     }
 
@@ -119,6 +134,19 @@ class MangaListFragment : Fragment(), CoroutineScope {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        coroutineContext.cancel() // Cancel coroutines when the view is destroyed
+        coroutineContext.cancel()
     }
+
+    companion object {
+        private const val ARG_MANGA_IDS = "mangaIds"
+
+        fun newInstance(mangaIds: List<String>?): MangaListFragment {
+            val fragment = MangaListFragment()
+            val args = Bundle()
+            args.putStringArrayList(ARG_MANGA_IDS, mangaIds?.let { ArrayList(it) })
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
 }
