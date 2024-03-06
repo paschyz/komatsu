@@ -1,5 +1,7 @@
 package com.example.komatsu.ui.fragments
+import ChapterListAdapter
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.komatsu.R
 import com.example.komatsu.databinding.MangaDetailsFragmentBinding
@@ -18,6 +23,8 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.example.komatsu.ui.view.activities.MangaDetailsActivity
+import com.example.komatsu.ui.view.adapters.MangaListAdapter
 import com.facebook.shimmer.ShimmerFrameLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,7 +59,16 @@ class MangaDetailsFragment : Fragment() {
             }
         }
 
+        val adapter = ChapterListAdapter()
+        viewModel.chapters.observe(viewLifecycleOwner) { chapters ->
+            chapters?.let {
+                adapter.submitList(chapters)
+            }
+        }
 
+        binding.mangaDetailsRecyclerView.adapter = adapter
+
+        binding.mangaDetailsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val shimmerLayout: ShimmerFrameLayout = binding.shimmerViewContainer
         val coverImage = binding.coverImage
