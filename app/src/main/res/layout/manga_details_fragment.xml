@@ -42,10 +42,10 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <!-- Gradient Overlay -->
-            <View
+          <!--  <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_gradient" />
+                android:background="@drawable/bg_gradient" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -59,7 +59,7 @@
             app:layout_constraintBottom_toBottomOf="@id/manga_cover"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             tools:text="Jujutsu Kaisen" />
 
         <TextView
@@ -74,7 +74,7 @@
             app:layout_constraintTop_toBottomOf="@id/manga_cover"
             tools:text="Description" />
 
-        <TextView
+<!--        <TextView
             android:id="@+id/manga_author"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -132,7 +132,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/manga_rating"
-            tools:text="Last Chapter Date" />
+            tools:text="Last Chapter Date" />-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chapterListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/manga_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

@@ -1,6 +1,7 @@
 package com.komatsu.data.api
 
 
+import com.komatsu.models.ChapterResponse
 import com.komatsu.models.Manga
 import retrofit2.Response
 import retrofit2.http.GET
@@ -47,6 +48,6 @@ interface ApiService {
     suspend fun getMangaWithVolumesAndChapters(
         @Path("id") id: String,
         @Query("translatedLanguage[]") includes: List<String>? = listOf("en"),
-    ): Response<Manga.MangasResponse>
+    ): Response<ChapterResponse>
 
 }
