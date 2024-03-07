@@ -12,10 +12,12 @@
         android:layout_margin="4dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textSize="11sp"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Jujutsu Kaisen"
-        tools:ignore="MissingConstraints" />
+        tools:text="3"
+        tools:ignore="MissingConstraints"
+        android:gravity="center"
+        android:padding="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
