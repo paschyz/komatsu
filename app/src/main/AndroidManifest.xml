@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.komatsu.MainActivity"
             android:exported="false" />
     </application>
 
