@@ -19,6 +19,8 @@
         <string name="tab_text_1">Tab 1</string>
         <string name="tab_text_2">Tab 2</string>
         <string name="title_activity_manga_details">MangaDetailsActivity</string>
+
+        <string name="title_activity_read_scan">ReadScanActivity</string>
         <!-- Strings used for fragments for navigation -->
         <string name="manga_details_label">First Fragment</string>
         <string name="second_fragment_label">Second Fragment</string>

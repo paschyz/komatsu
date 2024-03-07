@@ -23,6 +23,11 @@
             android:label="@string/title_activity_manga_details"
             android:theme="@style/Theme.CustomTheme" />
         <activity
+            android:name=".ui.view.activities.ReadScanActivity"
+            android:exported="false"
+            android:label="@string/title_activity_read_scan"
+            android:theme="@style/Theme.CustomTheme" />
+        <activity
             android:name=".ui.view.activities.ExploreActivity"
             android:exported="false"
             android:label="@string/title_activity_explore"

@@ -3,15 +3,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.komatsu.R
 import com.example.komatsu.domain.models.Chapter
 
-class ChapterListAdapter : ListAdapter<Chapter, ChapterListAdapter.ChapterViewHolder>(ChapterDiffCallback()) {
+class ChapterListAdapter(private var chapters: List<Chapter>, private val listener: OnChapterClickListener) :
+    RecyclerView.Adapter<ChapterListAdapter.ChapterViewHolder>() {
 
     lateinit var context: Context
+
+    interface OnChapterClickListener {
+        fun onChapterClick(chapter: Chapter)
+    }
+
+    inner class ChapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(chapter: Chapter, listener: OnChapterClickListener) {
+            itemView.findViewById<TextView>(R.id.title).apply {
+                text = chapter.chapter ?: "No chapter"
+            }
+            itemView.setOnClickListener {
+                listener.onChapterClick(chapter)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChapterViewHolder {
         context = parent.context
@@ -19,26 +33,14 @@ class ChapterListAdapter : ListAdapter<Chapter, ChapterListAdapter.ChapterViewHo
         return ChapterViewHolder(view)
     }
 
+    override fun getItemCount() = chapters.size
+
     override fun onBindViewHolder(holder: ChapterViewHolder, position: Int) {
-        val chapter = getItem(position)
-        holder.bind(chapter, context)
+        holder.bind(chapters[position], listener)
     }
 
-    inner class ChapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(chapter: Chapter, context: Context) {
-            itemView.findViewById<TextView>(R.id.title).apply {
-                text = chapter.chapter ?: "No chapter"
-            }
-        }
-    }
-
-    class ChapterDiffCallback : DiffUtil.ItemCallback<Chapter>() {
-        override fun areItemsTheSame(oldItem: Chapter, newItem: Chapter): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Chapter, newItem: Chapter): Boolean {
-            return oldItem == newItem
-        }
+    fun submitList(chapters: List<Chapter>) {
+        this.chapters = chapters
+        notifyDataSetChanged()
     }
 }
