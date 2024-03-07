@@ -19,18 +19,16 @@ class ReadScanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityReadScanBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navController = findNavController(R.id.nav_host_fragment_content_manga_details)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        // Your code for initializing and displaying scan images goes here
 
         val fragment = ReadScanFragment().apply {
             arguments = Bundle().apply {
-                putString("scanId", intent.getStringExtra("scanId"))
+                putString("chapterId", intent.getStringExtra("chapterId"))
             }
         }
+
         supportFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_content_manga_details, fragment)
+            .replace(R.id.nav_host_fragment, fragment)
             .commit()
+
     }
 }

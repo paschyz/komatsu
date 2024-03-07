@@ -34,9 +34,9 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_MangaDetailsFragment)
-        }
+     /*   binding.buttonSecond.setOnClickListener {
+            findNavController().navigate(R.id.action_ReadScanFragment_to_MangaDetailsFragment)
+        }*/
     }
 
     override fun onDestroyView() {

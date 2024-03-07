@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.komatsu.domain.models.Chapter
+import com.example.komatsu.ui.view.activities.ReadScanActivity
 import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -44,7 +45,7 @@ class MangaDetailsFragment : Fragment() {
 
         val adapter = ChapterListAdapter(emptyList(), object: ChapterListAdapter.OnChapterClickListener {
             override fun onChapterClick(chapter: Chapter) {
-                val intent = Intent(context, ReadScanFragment::class.java)
+                val intent = Intent(context, ReadScanActivity::class.java)
                 intent.putExtra("chapterId", chapter.id)
 
                 startActivity(intent)

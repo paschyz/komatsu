@@ -25,8 +25,7 @@
         <activity
             android:name=".ui.view.activities.ReadScanActivity"
             android:exported="false"
-            android:label="@string/title_activity_read_scan"
-            android:theme="@style/Theme.CustomTheme" />
+            android:label="@string/title_activity_read_scan" />
         <activity
             android:name=".ui.view.activities.ExploreActivity"
             android:exported="false"

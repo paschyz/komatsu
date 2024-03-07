@@ -37,6 +37,7 @@ class ReadScanFragment : Fragment() {
         val viewPager: ViewPager2 = binding.viewPager
         val adapter = ScanPagerAdapter(scanImages)
         viewPager.adapter = adapter
+        val mangaId = arguments?.getString("mangaId") ?: return
     }
 
     override fun onDestroyView() {
