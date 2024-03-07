@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.komatsu.data.database.dao.MangaCollectionDao
+import com.example.komatsu.data.repository.LocalMangaRepository
+import com.example.komatsu.data.repository.MangaCollectionRepository
 import com.example.komatsu.domain.models.Manga
 import kotlinx.coroutines.launch
 
-class ExploreViewModel(private val mangaCollectionDao: MangaCollectionDao) : ViewModel() {
-    val allMangaCollections = mangaCollectionDao.getAll().asLiveData()
+class ExploreViewModel(mangaCollectionRepository: MangaCollectionRepository,localMangaRepository: LocalMangaRepository) : ViewModel() {
+    val allMangaWithCollections = localMangaRepository.getMangasWithCollectionsLive().asLiveData()
 }

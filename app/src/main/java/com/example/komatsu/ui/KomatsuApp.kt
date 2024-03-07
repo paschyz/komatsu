@@ -13,7 +13,7 @@ class KomatsuApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        deleteDatabase("komatsu_database")
+//        deleteDatabase("komatsu_database")
 
         startKoin {
             androidLogger()

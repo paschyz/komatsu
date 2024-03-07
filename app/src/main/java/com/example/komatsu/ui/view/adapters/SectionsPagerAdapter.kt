@@ -6,17 +6,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.komatsu.data.database.entities.MangaCollectionEntity
+import com.example.komatsu.data.database.entities.MangaWithCollections
+import com.example.komatsu.data.models.MangaCollection
 import com.example.komatsu.ui.fragments.MangaListFragment
 
 
-public val BUILTIN_TAB_TITLES =
+val BUILTIN_TAB_TITLES =
     arrayOf(
         "Discover",
     )
 
 class SectionsPagerAdapter(
     activity: FragmentActivity,
-    private val mangaCollections: List<MangaCollectionEntity>,
+    private val mangaCollections: List<MangaCollection>,
+    private val mangasWithCollections: List<MangaWithCollections>,
 ) : FragmentStateAdapter(activity) {
     override fun getItemCount(): Int = BUILTIN_TAB_TITLES.size + mangaCollections.size
 
@@ -29,8 +32,16 @@ class SectionsPagerAdapter(
                     throw IllegalArgumentException("Invalid position: $position")
                 }
 
-                val mangaIds =
-                    mangaCollections.getOrNull(collectionPosition)?.mangas ?: listOf()
+                // filter the manga ids for the collection
+                val collection = mangaCollections[collectionPosition]
+                val mangaIds = mangasWithCollections
+                    .filter { it.collections.any { it.collectionId == collection.id } }
+                    .map { it.manga.mangaId }
+
+                Log.i("SectionsPagerAdapter", "Mangas with collections: $mangasWithCollections")
+                Log.i("SectionsPagerAdapter", "Collections available: $mangaCollections")
+                Log.i("SectionsPagerAdapter", "Manga ids for collection ${collection.name}: $mangaIds")
+
 
                 MangaListFragment.newInstance(mangaIds)
             }

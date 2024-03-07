@@ -2,6 +2,7 @@ package com.example.komatsu.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.komatsu.data.models.MangaCollection
 import com.example.komatsu.databinding.FragmentMangaListBinding
 import com.example.komatsu.domain.models.Manga
 import com.example.komatsu.ui.view.activities.MangaDetailsActivity
 import com.example.komatsu.ui.view.adapters.MangaListAdapter
 import com.example.komatsu.ui.viewmodel.MangaListViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -62,6 +65,12 @@ class MangaListFragment(private var mangaIds: List<String>? = null) : Fragment()
                         val intent = Intent(context, MangaDetailsActivity::class.java)
                         intent.putExtra("mangaId", manga.id)
                         startActivity(intent)
+                    }
+
+                    override fun onMangaLongClick(manga: Manga) {
+                        viewModel.mangaCollections.observe(viewLifecycleOwner) { collections ->
+                            showCollectionsDialog(manga, collections)
+                        }
                     }
                 }
             )
@@ -111,6 +120,28 @@ class MangaListFragment(private var mangaIds: List<String>? = null) : Fragment()
         }
 
         viewModel.getMangas(mangaIds)
+    }
+
+    private fun showCollectionsDialog(manga: Manga, collections: List<MangaCollection>) {
+        val collectionNames = collections.map { it.name }.toTypedArray()
+        val checkedItems = BooleanArray(collections.size) { false }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Add to Collection")
+            .setMultiChoiceItems(collectionNames, checkedItems) { dialog, which, isChecked ->
+                // Handle check change
+                checkedItems[which] = isChecked
+            }
+            .setPositiveButton("OK") { dialog, which ->
+                // Handle "OK" click
+                for (i in collections.indices) {
+                    if (checkedItems[i]) {
+                        viewModel.addMangaToCollection(manga.id, collections[i].id)
+                    }
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun showLoadMore() {

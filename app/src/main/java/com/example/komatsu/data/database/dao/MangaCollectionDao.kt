@@ -10,12 +10,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MangaCollectionDao {
     @Query("SELECT * FROM manga_collection")
-    fun getAll(): Flow<List<MangaCollectionEntity>>
+    fun getAllLive(): Flow<List<MangaCollectionEntity>>
 
-    @Query("SELECT * FROM manga_collection WHERE id = :id")
-    fun getById(id: String): Flow<MangaCollectionEntity>
+    @Query("SELECT * FROM manga_collection")
+    fun getAll(): List<MangaCollectionEntity>
 
-    @Query("DELETE FROM manga_collection WHERE id = :id")
+    @Query("SELECT * FROM manga_collection WHERE collectionId = :id")
+    fun getById(id: String): MangaCollectionEntity?
+
+    @Query("DELETE FROM manga_collection WHERE collectionId = :id")
     fun deleteById(id: String)
 
     @Query("DELETE FROM manga_collection")

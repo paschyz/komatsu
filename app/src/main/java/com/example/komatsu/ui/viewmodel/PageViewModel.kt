@@ -15,7 +15,7 @@ class PageViewModel(private val mangaCollectionDao: MangaCollectionDao) : ViewMo
             }
 
     // Use the repository for data operations
-    val allMangaCollections = mangaCollectionDao.getAll().asLiveData()
+    val allMangaCollections = mangaCollectionDao.getAllLive().asLiveData()
 
     fun setIndex(index: Int) {
         _index.value = index

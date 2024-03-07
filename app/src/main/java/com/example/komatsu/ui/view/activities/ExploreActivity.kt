@@ -2,9 +2,12 @@ package com.example.komatsu.ui.view.activities
 
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.map
 import androidx.viewpager2.widget.ViewPager2
+import com.example.komatsu.data.database.entities.MangaCollectionEntity
 import com.example.komatsu.ui.view.adapters.SectionsPagerAdapter
 import com.example.komatsu.databinding.ActivityExploreBinding
 import com.example.komatsu.ui.view.adapters.BUILTIN_TAB_TITLES
@@ -24,8 +27,14 @@ class ExploreActivity : AppCompatActivity() {
         binding = ActivityExploreBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.allMangaCollections.observe(this) { collections ->
-            val sectionsPagerAdapter = SectionsPagerAdapter(this, collections)
+        viewModel.allMangaWithCollections.observe(this) { mangaWithCollections ->
+            val collections =
+                mangaWithCollections.map { it.collections }.flatten().distinctBy { it.collectionId }
+                    .map { it.toMangaCollection() }
+
+
+            val sectionsPagerAdapter =
+                SectionsPagerAdapter(this, collections, mangaWithCollections)
             val viewPager: ViewPager2 = binding.viewPager
             viewPager.adapter = sectionsPagerAdapter
             // HACK: This is a workaround for a bug in ViewPager2 where some pages
@@ -42,7 +51,5 @@ class ExploreActivity : AppCompatActivity() {
                 }
             }.attach()
         }
-
-
     }
 }

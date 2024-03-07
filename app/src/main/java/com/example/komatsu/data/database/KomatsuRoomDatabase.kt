@@ -1,21 +1,34 @@
 package com.example.komatsu.data.database
 
 import androidx.room.Database
+import androidx.room.RoomDatabase
 import androidx.room.RoomDatabase.Callback
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.komatsu.data.database.converters.MangaIdListConverter
+import com.example.komatsu.data.database.dao.LocalMangaDao
+import com.example.komatsu.data.database.dao.MangaCollectionCrossRefDao
 import com.example.komatsu.data.database.dao.MangaCollectionDao
 import com.example.komatsu.data.database.dao.MangaDao
+import com.example.komatsu.data.database.entities.LocalMangaEntity
 import com.example.komatsu.data.database.entities.MangaCollectionEntity
+import com.example.komatsu.data.database.entities.MangaWithCollections
+import com.example.komatsu.data.database.relations.MangaCollectionCrossRef
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [MangaCollectionEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        MangaCollectionEntity::class,
+        LocalMangaEntity::class,
+        MangaCollectionCrossRef::class,
+    ], version = 1, exportSchema = false
+)
 @TypeConverters(MangaIdListConverter::class)
-abstract class KomatsuRoomDatabase : androidx.room.RoomDatabase() {
-    abstract fun mangaDao(): MangaDao
+abstract class KomatsuRoomDatabase : RoomDatabase() {
     abstract fun mangaCollectionDao(): MangaCollectionDao
+    abstract fun localMangaDao(): LocalMangaDao
+    abstract fun mangaCollectionCrossRefDao(): MangaCollectionCrossRefDao
 
     private class KomatsuRoomDatabaseCallback(
         private val scope: CoroutineScope,
@@ -23,11 +36,15 @@ abstract class KomatsuRoomDatabase : androidx.room.RoomDatabase() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
-                scope.launch { populateDatabase(database.mangaCollectionDao()) }
+                scope.launch { populateDatabase(database) }
             }
         }
 
-        fun populateDatabase(mangaCollectionDao: MangaCollectionDao) {
+        suspend fun populateDatabase(database: KomatsuRoomDatabase) {
+            val mangaCollectionDao = database.mangaCollectionDao()
+            val mangaDao = database.localMangaDao()
+            val mangaCollectionCrossRefDao = database.mangaCollectionCrossRefDao()
+
             val prePopulatedMangaCollections = arrayOf(
                 "Saved",
                 "Reading",
@@ -38,10 +55,27 @@ abstract class KomatsuRoomDatabase : androidx.room.RoomDatabase() {
             )
 
             for (mangaCollection in prePopulatedMangaCollections) {
-                mangaCollectionDao.insert(MangaCollectionEntity(
-                    name = mangaCollection,
-                    mangas = listOf("c52b2ce3-7f95-469c-96b0-479524fb7a1a")
-                ))
+
+                val mangaCollection =
+                    MangaCollectionEntity(
+                        name = mangaCollection,
+                    )
+
+                mangaCollectionDao.insert(mangaCollection)
+
+                mangaDao.insertManga(
+                    LocalMangaEntity(
+                        mangaId = "c52b2ce3-7f95-469c-96b0-479524fb7a1a",
+                    )
+                )
+
+
+                mangaCollectionCrossRefDao.insertCrossRef(
+                    MangaCollectionCrossRef(
+                        mangaId = "c52b2ce3-7f95-469c-96b0-479524fb7a1a",
+                        collectionId = mangaCollection.collectionId
+                    )
+                )
             }
         }
     }

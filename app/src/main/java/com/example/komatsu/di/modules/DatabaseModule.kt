@@ -6,5 +6,6 @@ import org.koin.dsl.module
 val DatabaseModule = module {
     single { KomatsuRoomDatabase.getDatabase(get(), get()) }
     single { get<KomatsuRoomDatabase>().mangaCollectionDao() }
-    single { get<KomatsuRoomDatabase>().mangaDao() }
+    single { get<KomatsuRoomDatabase>().localMangaDao() }
+    single { get<KomatsuRoomDatabase>().mangaCollectionCrossRefDao() }
 }

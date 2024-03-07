@@ -25,6 +25,7 @@ class MangaListAdapter(private var mangas: List<Manga>, private val listener: On
 
     interface OnMangaClickListener {
         fun onMangaClick(manga: Manga)
+        fun onMangaLongClick(manga: Manga)
     }
 
     class MangaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,6 +40,11 @@ class MangaListAdapter(private var mangas: List<Manga>, private val listener: On
 
             itemView.setOnClickListener {
                 listener.onMangaClick(manga)
+            }
+
+            itemView.setOnLongClickListener {
+                listener.onMangaLongClick(manga)
+                true
             }
 
 
