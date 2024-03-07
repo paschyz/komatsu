@@ -11,18 +11,29 @@
         android:label="@string/manga_details_label"
         tools:layout="@layout/manga_details_fragment">
 
-        <action
+<!--        <action
             android:id="@+id/action_MangaDetailsFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/ReadScanFragment" />-->
     </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.komatsu.ui.fragments.SecondFragment"
+   <!-- <fragment
+        android:id="@+id/ReadScanFragment"
+        android:name="com.example.komatsu.ui.fragments.ReadScanFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        tools:layout="@layout/fragment_read_scan">
         <action
-            android:id="@+id/action_SecondFragment_to_MangaDetailsFragment"
-            app:destination="@id/MangaDetails" />
-    </fragment>
+            android:id="@+id/action_ReadScanFragment_to_MangaDetailsFragment"
+            app:destination="@id/ReadScanFragment" />
+
+    </fragment>-->
+
+    <!--    <fragment
+            android:id="@+id/SecondFragment"
+            android:name="com.example.komatsu.ui.fragments.SecondFragment"
+            android:label="@string/second_fragment_label"
+            tools:layout="@layout/fragment_second">
+
+            <action
+                android:id="@+id/action_SecondFragment_to_MangaDetailsFragment"
+                app:destination="@id/MangaDetails" />
+        </fragment>-->
 </navigation>
