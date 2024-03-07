@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.komatsu"
+    namespace = "com.komatsu"
     compileSdk = 34
 
     buildFeatures {
@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.komatsu"
+        applicationId = "com.komatsu"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

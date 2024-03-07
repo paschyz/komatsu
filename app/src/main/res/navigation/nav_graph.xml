@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/MangaDetails"
-        android:name="com.example.komatsu.ui.fragments.MangaDetailsFragment"
+        android:name="com.komatsu.ui.fragments.MangaDetailsFragment"
         android:label="@string/manga_details_label"
         tools:layout="@layout/manga_details_fragment">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.example.komatsu.ui.fragments.SecondFragment"
+        android:name="com.komatsu.ui.fragments.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 

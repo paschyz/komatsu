@@ -1,4 +1,4 @@
-package com.example.komatsu
+package com.komatsu
 
 import org.junit.Test
 
