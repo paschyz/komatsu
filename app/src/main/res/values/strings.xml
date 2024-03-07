@@ -3,31 +3,32 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-        <!-- Default screen margins, per the Android Design guidelines. -->
-        <string name="title_activity_authentication">AuthenticationActivity</string>
-        <string name="prompt_email">Email</string>
-        <string name="prompt_password">Password</string>
-        <string name="action_sign_in">Sign in or register</string>
-        <string name="action_sign_in_short">Sign in</string>
-        <string name="welcome">"Welcome !"</string>
-        <string name="invalid_username">Not a valid username</string>
-        <string name="invalid_password">Password must be >5 characters</string>
-        <string name="authentication_failed">"Authentication failed"</string>
-        <string name="action_register">Register</string>
-        <string name="action_forgot_password">Forgot password</string>
-        <string name="title_activity_explore">ExploreActivity</string>
-        <string name="tab_text_1">Tab 1</string>
-        <string name="tab_text_2">Tab 2</string>
-        <string name="title_activity_manga_details">MangaDetailsActivity</string>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <string name="title_activity_authentication">AuthenticationActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="authentication_failed">"Authentication failed"</string>
+    <string name="action_register">Register</string>
+    <string name="action_signin_with_oauth">Sign in with OAuth</string>
+    <string name="action_forgot_password">Forgot password</string>
+    <string name="title_activity_explore">ExploreActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="title_activity_manga_details">MangaDetailsActivity</string>
 
-        <string name="title_activity_read_scan">ReadScanActivity</string>
-        <!-- Strings used for fragments for navigation -->
-        <string name="manga_details_label">First Fragment</string>
-        <string name="second_fragment_label">Second Fragment</string>
-        <string name="next">Next</string>
-        <string name="previous">Previous</string>
+    <string name="title_activity_read_scan">ReadScanActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="manga_details_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 
-        <string name="lorem_ipsum">
+    <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
         dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
@@ -63,4 +64,5 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
-    </resources>
+    <string name="action_guest_short">Sign in as Guest</string>
+</resources>

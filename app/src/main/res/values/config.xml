@@ -2,4 +2,10 @@
 <resources>
     <string name="base_url">https://api.mangadex.org</string>
     <string name="base_cover_url">https://uploads.mangadex.org/covers/%1$s/%2$s</string>
+    <string name="com_auth0_app_name">KotlinPlayground</string>
+    <string name="com_auth0_domain">dev-ndbvrcel.us.auth0.com</string>
+    <string name="com_auth0_client_id">V01TZHtBWYkAznHMWvox48YKHbOiPBjX</string>
+    <string name="com_auth0_secret">6lLNeWDAqNjJ6q-MDT5EU2YtqZbIA-7s0skOD6QFp9xgnQzZXln8LrQ_tVOuC3zU</string>
+    <string name="com_auth0_scheme">demo</string>
+    <string name="com_auth0_logout_scheme">demo</string>
 </resources>
