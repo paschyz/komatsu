@@ -7,13 +7,18 @@ import com.example.komatsu.data.database.entities.LocalMangaEntity
 import com.example.komatsu.data.database.entities.MangaCollectionEntity
 import com.example.komatsu.data.database.entities.MangaWithCollections
 import com.example.komatsu.data.database.relations.MangaCollectionCrossRef
+import com.example.komatsu.data.models.MangaCollection
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class LocalMangaRepository(
     private val localMangaDao: LocalMangaDao,
     private val mangaCollectionDao: MangaCollectionDao,
     private val mangaCollectionCrossRefDao: MangaCollectionCrossRefDao,
 ) {
+
+    val allMangasWithCollections: Flow<List<MangaWithCollections>> = localMangaDao.getMangasWithCollectionsLive()
+
     suspend fun insertMangaAndCollection(
         manga: LocalMangaEntity,
         collection: MangaCollectionEntity,
@@ -78,5 +83,9 @@ class LocalMangaRepository(
 
     fun getMangasWithCollectionsLive(): Flow<List<MangaWithCollections>> {
         return localMangaDao.getMangasWithCollectionsLive()
+    }
+
+    suspend fun getMangaWithCollectionsById(mangaId: String): MangaWithCollections? {
+        return localMangaDao.getMangaWithCollectionsById(mangaId)
     }
 }

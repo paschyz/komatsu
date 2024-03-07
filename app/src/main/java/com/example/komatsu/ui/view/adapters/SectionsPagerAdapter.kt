@@ -24,8 +24,9 @@ class SectionsPagerAdapter(
     override fun getItemCount(): Int = BUILTIN_TAB_TITLES.size + mangaCollections.size
 
     override fun createFragment(position: Int): Fragment {
+
         return when (position) {
-            0 -> MangaListFragment.newInstance(null)
+            0 -> MangaListFragment.newInstance(null, null)
             else -> {
                 val collectionPosition = position - BUILTIN_TAB_TITLES.size
                 if (collectionPosition < 0 || collectionPosition >= mangaCollections.size) {
@@ -38,12 +39,17 @@ class SectionsPagerAdapter(
                     .filter { it.collections.any { it.collectionId == collection.id } }
                     .map { it.manga.mangaId }
 
+                val currentCollectionId = collection.id
+
                 Log.i("SectionsPagerAdapter", "Mangas with collections: $mangasWithCollections")
                 Log.i("SectionsPagerAdapter", "Collections available: $mangaCollections")
-                Log.i("SectionsPagerAdapter", "Manga ids for collection ${collection.name}: $mangaIds")
+                Log.i(
+                    "SectionsPagerAdapter",
+                    "Manga ids for collection ${collection.name}: $mangaIds"
+                )
 
 
-                MangaListFragment.newInstance(mangaIds)
+                MangaListFragment.newInstance(mangaIds, currentCollectionId)
             }
         }
     }

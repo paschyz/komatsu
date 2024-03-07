@@ -22,7 +22,10 @@ import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MangaListFragment(private var mangaIds: List<String>? = null) : Fragment(), CoroutineScope {
+class MangaListFragment(
+    private var mangaIds: List<String>? = null,
+    private var currentCollectionId: String? = null,
+) : Fragment(), CoroutineScope {
 
     private var _binding: FragmentMangaListBinding? = null
     private val binding
@@ -124,16 +127,24 @@ class MangaListFragment(private var mangaIds: List<String>? = null) : Fragment()
 
     private fun showCollectionsDialog(manga: Manga, collections: List<MangaCollection>) {
         val collectionNames = collections.map { it.name }.toTypedArray()
+        val mangasWithCollections = viewModel.mangasWithCollections.value ?: listOf()
         val checkedItems = BooleanArray(collections.size) { false }
+
+        for (i in collections.indices) {
+            val collectionId = collections[i].id
+            mangasWithCollections
+                .filter { it.collections.any { it.collectionId == collectionId } }
+                .map { it.manga.mangaId }.also {
+                    checkedItems[i] = it.contains(manga.id)
+                }
+        }
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Add to Collection")
             .setMultiChoiceItems(collectionNames, checkedItems) { dialog, which, isChecked ->
-                // Handle check change
                 checkedItems[which] = isChecked
             }
             .setPositiveButton("OK") { dialog, which ->
-                // Handle "OK" click
                 for (i in collections.indices) {
                     if (checkedItems[i]) {
                         viewModel.addMangaToCollection(manga.id, collections[i].id)
@@ -170,11 +181,13 @@ class MangaListFragment(private var mangaIds: List<String>? = null) : Fragment()
 
     companion object {
         private const val ARG_MANGA_IDS = "mangaIds"
+        private const val ARG_COLLECTION_ID = "collectionId"
 
-        fun newInstance(mangaIds: List<String>?): MangaListFragment {
+        fun newInstance(mangaIds: List<String>?, collectionId: String?): MangaListFragment {
             val fragment = MangaListFragment()
             val args = Bundle()
             args.putStringArrayList(ARG_MANGA_IDS, mangaIds?.let { ArrayList(it) })
+            args.putString(ARG_COLLECTION_ID, collectionId)
             fragment.arguments = args
             return fragment
         }

@@ -35,5 +35,9 @@ interface LocalMangaDao {
     @Query("SELECT * FROM local_manga")
     fun getMangasWithCollectionsLive(): Flow<List<MangaWithCollections>>
 
+    @Transaction
+    @Query("SELECT * FROM local_manga WHERE mangaId = :mangaId")
+suspend fun getMangaWithCollectionsById(mangaId: String): MangaWithCollections?
+
 }
 

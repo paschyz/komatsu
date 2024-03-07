@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.komatsu.data.database.entities.LocalMangaEntity
+import com.example.komatsu.data.database.entities.MangaWithCollections
 import com.example.komatsu.data.models.MangaCollection
 import com.example.komatsu.data.repository.LocalMangaRepository
 import com.example.komatsu.data.repository.MangaCollectionRepository
@@ -25,6 +26,9 @@ class MangaListViewModel(
 
     private val _mangaCollections = mangaCollectionRepository.allMangaCollections
     val mangaCollections: LiveData<List<MangaCollection>> = _mangaCollections.asLiveData()
+
+    private val _mangasWithCollections = localMangaRepository.allMangasWithCollections
+    val mangasWithCollections: LiveData<List<MangaWithCollections>> = _mangasWithCollections.asLiveData()
 
     private val limit = 20
     private var offset = 0
@@ -140,5 +144,6 @@ class MangaListViewModel(
             }
         }
     }
+
 }
 
