@@ -53,7 +53,6 @@ class MangaDetailsFragment : Fragment() {
                 startActivity(intent)
             }
         })
-        // Retrieve manga ID passed from previous fragment/activity
         val mangaId = arguments?.getString("mangaId") ?: return
 
         viewModel.getManga(mangaId)
@@ -76,13 +75,10 @@ class MangaDetailsFragment : Fragment() {
 
         shimmerLayout.startShimmer()
 
-        // Observe manga details LiveData from ViewModel
         viewModel.manga.observe(viewLifecycleOwner) { manga ->
             binding.mangaTitle.text = manga.attributes.title["en"]
 
-            // Set manga title
             binding.mangaDescription.text = manga.attributes.description["en"]
-            // Construct coverArtUrl and load it with Glide
             val coverArtFilename =
                 manga.relationships.find { it.type == "cover_art" }?.attributes?.get("fileName") as? String
             val coverArtUrl =
