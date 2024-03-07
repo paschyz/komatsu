@@ -1,4 +1,4 @@
-package com.example.komatsu.domain.models
+package com.example.komatsu.models
 
 
 import com.google.gson.annotations.SerializedName

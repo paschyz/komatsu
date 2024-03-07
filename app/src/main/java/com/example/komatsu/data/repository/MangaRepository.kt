@@ -1,6 +1,6 @@
 package com.example.komatsu.data.repository
 
-import com.example.komatsu.domain.models.Manga
+import com.example.komatsu.models.Manga
 import com.example.komatsu.data.api.ApiService
 
 class MangaRepository(private val mangaApi: ApiService) {

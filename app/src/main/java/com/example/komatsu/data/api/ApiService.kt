@@ -1,7 +1,7 @@
 package com.example.komatsu.data.api
 
 
-import com.example.komatsu.domain.models.Manga
+import com.example.komatsu.models.Manga
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

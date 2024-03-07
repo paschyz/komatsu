@@ -1,17 +1,12 @@
 package com.example.komatsu.ui.fragments
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.example.komatsu.R
 import com.example.komatsu.databinding.MangaDetailsFragmentBinding
-import com.example.komatsu.domain.models.Manga
 import com.example.komatsu.ui.viewmodel.MangaDetailsViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource

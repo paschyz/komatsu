@@ -14,6 +14,7 @@ import com.example.komatsu.ui.fragments.MangaListFragment
 val BUILTIN_TAB_TITLES =
     arrayOf(
         "Discover",
+        "Featured",
     )
 
 class SectionsPagerAdapter(
@@ -26,30 +27,22 @@ class SectionsPagerAdapter(
     override fun createFragment(position: Int): Fragment {
 
         return when (position) {
-            0 -> MangaListFragment.newInstance(null, null)
+            0 -> MangaListFragment.newInstance(null)
+            // TODO: Add a featured manga collection
+            1 -> MangaListFragment.newInstance(null)
             else -> {
                 val collectionPosition = position - BUILTIN_TAB_TITLES.size
                 if (collectionPosition < 0 || collectionPosition >= mangaCollections.size) {
                     throw IllegalArgumentException("Invalid position: $position")
                 }
 
-                // filter the manga ids for the collection
                 val collection = mangaCollections[collectionPosition]
                 val mangaIds = mangasWithCollections
                     .filter { it.collections.any { it.collectionId == collection.id } }
                     .map { it.manga.mangaId }
 
-                val currentCollectionId = collection.id
 
-                Log.i("SectionsPagerAdapter", "Mangas with collections: $mangasWithCollections")
-                Log.i("SectionsPagerAdapter", "Collections available: $mangaCollections")
-                Log.i(
-                    "SectionsPagerAdapter",
-                    "Manga ids for collection ${collection.name}: $mangaIds"
-                )
-
-
-                MangaListFragment.newInstance(mangaIds, currentCollectionId)
+                MangaListFragment.newInstance(mangaIds)
             }
         }
     }

@@ -2,6 +2,7 @@ package com.example.komatsu.ui.view.adapters
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.komatsu.R
 
-import com.example.komatsu.domain.models.Manga
+import com.example.komatsu.models.Manga
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -103,6 +104,7 @@ class MangaListAdapter(private var mangas: List<Manga>, private val listener: On
     override fun getItemCount() = mangas.size
 
     fun updateMangas(newMangas: List<Manga>) {
+        Log.d("MangaListAdapter", "Updating mangas, new size: ${newMangas.size}")
         mangas = newMangas
         notifyDataSetChanged()
     }

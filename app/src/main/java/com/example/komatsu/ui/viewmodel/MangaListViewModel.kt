@@ -1,41 +1,44 @@
 package com.example.komatsu.ui.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.komatsu.data.database.entities.LocalMangaEntity
 import com.example.komatsu.data.database.entities.MangaWithCollections
 import com.example.komatsu.data.models.MangaCollection
 import com.example.komatsu.data.repository.LocalMangaRepository
 import com.example.komatsu.data.repository.MangaCollectionRepository
 import com.example.komatsu.data.repository.MangaRepository
-import com.example.komatsu.domain.models.Manga
+import com.example.komatsu.models.Manga
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
 class MangaListViewModel(
     private val mangaRepository: MangaRepository,
-    private val mangaCollectionRepository: MangaCollectionRepository,
+    mangaCollectionRepository: MangaCollectionRepository,
     private val localMangaRepository: LocalMangaRepository,
 ) : ViewModel() {
-    private val _mangas = MutableLiveData<List<Manga>>()
-    val mangas: LiveData<List<Manga>> = _mangas
-
-    private val _mangaCollections = mangaCollectionRepository.allMangaCollections
-    val mangaCollections: LiveData<List<MangaCollection>> = _mangaCollections.asLiveData()
-
-    private val _mangasWithCollections = localMangaRepository.allMangasWithCollections
-    val mangasWithCollections: LiveData<List<MangaWithCollections>> = _mangasWithCollections.asLiveData()
 
     private val limit = 20
-    private var offset = 0
+    private var offset = MutableLiveData(0)
 
     private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
+    val error: LiveData<String?> get() = _error
 
+    private val _mangaIds = MutableLiveData<List<String>?>()
+    private val _mangas = MutableLiveData<List<Manga>>(emptyList())
+    val mangas: LiveData<List<Manga>> get() = _mangas
+
+    // LiveData for manga collections directly observed from the repository
+    val mangaCollections: LiveData<List<MangaCollection>> =
+        mangaCollectionRepository.allMangaCollections.asLiveData()
+    val mangasWithCollections: LiveData<List<MangaWithCollections>> =
+        localMangaRepository.allMangasWithCollections.asLiveData()
+
+
+    private fun appendMangas(newMangas: List<Manga>) {
+        val currentMangas = _mangas.value ?: emptyList()
+        _mangas.value = currentMangas + newMangas
+    }
     fun getMangas(ids: List<String>? = null) {
         viewModelScope.launch {
             try {
@@ -44,14 +47,15 @@ class MangaListViewModel(
                         ids = ids,
                         includes = listOf("cover_art"),
                         limit = limit,
-                        offset = offset
+                        offset = offset.value ?: 0
                     )
                 if (mangas.isNullOrEmpty()) {
                     _error.value = "No mangas found"
                     Log.e("MangaListViewModel", "No mangas found")
                     return@launch
                 }
-                _mangas.value = mangas!!
+                appendMangas(mangas)
+                offset.value = (offset.value ?: 0) + mangas.size
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = e.message
@@ -64,86 +68,45 @@ class MangaListViewModel(
         viewModelScope.launch {
             try {
                 val mangas = mangaRepository.searchMangas(query)
-                if (mangas.isNullOrEmpty()) {
-                    _error.value = "No mangas found"
-                    Log.e("MangaListViewModel", "No mangas found")
-                    return@launch
-                }
-                _mangas.value = mangas!!
-                _error.value = null
+                _mangas.postValue(mangas ?: emptyList())
             } catch (e: Exception) {
-                _error.value = e.message
-                Log.e("MangaListViewModel", e.message ?: "Error")
+                _error.value = "Error searching mangas: ${e.message}"
             }
         }
     }
 
     fun loadMoreMangas(ids: List<String>? = null) {
-        // if ids is not null, take a slice of the list of ids
-        var sliceIds: List<String>? = null
         if (ids != null) {
-            val start = offset
+            val start = min(offset.value ?: 0, ids.size)
             val end = min(start + limit, ids.size)
 
-            if (start < ids.size) {
-                sliceIds = ids.slice(start until end)
+            if (start >= ids.size) {
+                _error.value = "No more mangas to load"
+                return
             }
+
+            val nextIds = ids.subList(start, end)
+            _mangaIds.value = nextIds
+            offset.value = end
+        } else {
+            val currentOffset = offset.value ?: 0
+            offset.value = currentOffset + limit
+
+            _mangaIds.value = null
         }
 
-        viewModelScope.launch {
-            offset += limit
-            try {
-                val mangas =
-                    mangaRepository.getMangas(
-                        includes = listOf("cover_art"),
-                        limit = limit,
-                        offset = offset,
-                        ids = sliceIds
-                    )
-                if (mangas.isNullOrEmpty()) {
-                    _error.value = "No more mangas found"
-                    Log.e("MangaListViewModel", "No more mangas found")
-                    return@launch
-                }
-                _mangas.value = _mangas.value?.plus(mangas!!)
-                _error.value = null
-            } catch (e: Exception) {
-                _error.value = e.message
-                Log.e("MangaListViewModel", e.message ?: "Error")
-            }
-        }
-    }
-
-    fun getAllMangaCollections() {
-        viewModelScope.launch {
-            try {
-                val collections = mangaCollectionRepository.getAll()
-                if (collections.isEmpty()) {
-                    _error.value = "No collections found"
-                    Log.e("MangaListViewModel", "No collections found")
-                    return@launch
-                }
-                _error.value = null
-            } catch (e: Exception) {
-                _error.value = e.message
-                Log.e("MangaListViewModel", e.message ?: "Error")
-            }
-        }
+        getMangas(_mangaIds.value)
     }
 
     fun addMangaToCollection(mangaId: String, collectionId: String) {
         viewModelScope.launch {
             try {
-                localMangaRepository.insertManga(
-                    LocalMangaEntity(mangaId)
-                )
+                localMangaRepository.insertManga(LocalMangaEntity(mangaId))
                 localMangaRepository.insertMangaInCollection(mangaId, collectionId)
             } catch (e: Exception) {
-                _error.value = e.message
-                Log.e("MangaListViewModel", e.message ?: "Error")
+                _error.value = "Error adding manga to collection: ${e.message}"
             }
         }
     }
 
 }
-
